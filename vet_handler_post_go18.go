@@ -36,5 +36,9 @@ func vetHandler(t *testing.T, config configData) http.HandlerFunc {
 			t.Errorf("Invalid ReaderFrom. (expected %v)", config.IsReaderFrom)
 		}
 
+		if _, ok := w.(http.Pusher); ok != config.IsPusher {
+			t.Errorf("Invalid Pusher. (expected %v)", config.IsPusher)
+		}
+
 	}
 }
