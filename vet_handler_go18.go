@@ -1,4 +1,4 @@
-// +build !go1.8
+// +build go1.8
 
 package http_middleware_vet
 
@@ -10,7 +10,7 @@ import (
 
 func vetHandler(t *testing.T, config configData) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if config.Proto != config.Proto {
+		if r.Proto != config.Proto {
 			t.Errorf("Invalid Proto. (expected %q)", config.Proto)
 			t.Logf("VSN: %s (%d/%d) (tls: %v)", r.Proto, r.ProtoMajor, r.ProtoMinor, r.TLS != nil)
 		}
@@ -34,6 +34,10 @@ func vetHandler(t *testing.T, config configData) http.HandlerFunc {
 
 		if _, ok := w.(io.ReaderFrom); ok != config.IsReaderFrom {
 			t.Errorf("Invalid ReaderFrom. (expected %v)", config.IsReaderFrom)
+		}
+
+		if _, ok := w.(http.Pusher); ok != config.IsPusher {
+			t.Errorf("Invalid Pusher. (expected %v)", config.IsPusher)
 		}
 
 	}

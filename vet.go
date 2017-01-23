@@ -27,6 +27,7 @@ var http11Config = configData{
 	IsHijacker:      true,
 	IsCloseNotifier: true,
 	IsReaderFrom:    true,
+	IsPusher:        false,
 }
 
 var https11Config = configData{
@@ -36,6 +37,7 @@ var https11Config = configData{
 	IsHijacker:      true,
 	IsCloseNotifier: true,
 	IsReaderFrom:    true,
+	IsPusher:        false,
 }
 
 var http20Config = configData{
