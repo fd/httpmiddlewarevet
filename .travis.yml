@@ -4,6 +4,5 @@ go_import_path: github.com/fd/httpwrapper
 
 go:
   - 1.x
-  - 1.6
   - 1.7
   - master
