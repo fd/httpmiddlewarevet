@@ -50,7 +50,7 @@ var http20Config = configData{
 	IsPusher:        true,
 }
 
-// Vet will verify that you correctly implement you http.ResponseWriter wrapper
+// Vet will verify that you correctly implement your http.ResponseWriter wrapper.
 func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 	t.Run("HTTP/1.1", func(t *testing.T) {
 		server := httptest.NewUnstartedServer(f(vetHandler(t, http11Config)))
