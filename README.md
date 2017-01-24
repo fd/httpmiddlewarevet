@@ -1,6 +1,8 @@
+[![Build Status](https://travis-ci.org/fd/httpmiddlewarevet.svg?branch=master)](https://travis-ci.org/fd/httpmiddlewarevet)
+[![GoDoc](https://godoc.org/github.com/fd/httpmiddlewarevet?status.svg)](https://godoc.org/github.com/fd/httpmiddlewarevet)
+
 # HTTP Middleware Vet
 
----
 
 #### Validate Middleware Handlers with Vet
 
@@ -27,7 +29,7 @@ func Test(t *testing.T) {
 
 ----
 
-#### Must Implement :
+#### Middleware Must Implement :
 
 - HTTP/1.1
   - http.Flusher
