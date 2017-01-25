@@ -129,6 +129,9 @@ func runTest(tc *testCase, tr *testReporter, newServer newServerFunc, wrapper wr
 	{ // setup default config
 		// fails because there is no server running at that address (but used to setup HTTP/2)
 		client.Get("http://127.0.0.1:1/")
+		if rt.TLSClientConfig == nil {
+			rt.TLSClientConfig = &tls.Config{}
+		}
 		rt.TLSClientConfig.InsecureSkipVerify = true
 	}
 
