@@ -19,10 +19,10 @@ type Middleware struct {
 }
 
 // Run all middleware tests
-func Run(pkg string, middlewares ...Middleware) {
-	report := runAll(pkg, middlewares...)
+func Run(middlewares ...Middleware) {
+	reports := runAll(middlewares...)
 
-	data, err := json.MarshalIndent(report, "", "  ")
+	data, err := json.MarshalIndent(reports, "", "  ")
 	if err != nil {
 		panic(err)
 	}
@@ -33,40 +33,15 @@ func Run(pkg string, middlewares ...Middleware) {
 	}
 }
 
-func runAll(pkg string, middlewares ...Middleware) *reports.Package {
-	packageReport := &reports.Package{Pkg: pkg}
-
-	var (
-		hasFailed  bool
-		hasSkipped bool
-		hasPassed  bool
-	)
+func runAll(middlewares ...Middleware) []*reports.Handler {
+	var r []*reports.Handler
 
 	for _, middleware := range middlewares {
 		handlerReport := runSingle(middleware)
-
-		switch handlerReport.Status {
-		case "failed":
-			hasFailed = true
-		case "passed":
-			hasSkipped = true
-		case "skipped":
-			hasPassed = true
-		}
-
-		packageReport.Handlers = append(packageReport.Handlers, handlerReport)
+		r = append(r, handlerReport)
 	}
 
-	switch {
-	case hasFailed:
-		packageReport.Status = "failed"
-	case hasPassed:
-		packageReport.Status = "passed"
-	case hasSkipped:
-		packageReport.Status = "skipped"
-	}
-
-	return packageReport
+	return r
 }
 
 func runSingle(middleware Middleware) *reports.Handler {

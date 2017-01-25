@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,6 +13,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/fd/httpmiddlewarevet/reports"
 
 	"golang.org/x/net/context"
 )
@@ -24,12 +27,22 @@ func main() {
 		panic(err)
 	}
 
+	var r []*reports.UnversionedPackage
+
 	for _, pkg := range pkgs {
 		fmt.Printf("testing %q\n", pkg)
-		log, report, ok := runTest(ctx, pkg)
-		_ = report
-		_ = ok
-		os.Stdout.Write(log)
+		report := runTest(ctx, pkg)
+		r = append(r, report)
+	}
+
+	data, err := json.Marshal(r)
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile("./report.json", data, 0666)
+	if err != nil {
+		panic(err)
 	}
 }
 
@@ -92,12 +105,56 @@ func findPackages() ([]string, error) {
 	return pkgs, nil
 }
 
-func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
+func runTest(ctx context.Context, pkg string) (report *reports.UnversionedPackage) {
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Minute)
 	defer cancel()
 
+	report = &reports.UnversionedPackage{Pkg: pkg}
+
 	var buf bytes.Buffer
-	var report bytes.Buffer
+	var reportBuf bytes.Buffer
+
+	defer func() {
+		var handlers []*reports.Handler
+
+		data := reportBuf.Bytes()
+		data = bytes.TrimSpace(data)
+		if len(data) > 0 {
+			err := json.Unmarshal(data, &handlers)
+			if err != nil {
+				fmt.Fprintf(&buf, "failed to decode report: %s", err)
+			}
+		}
+
+		report.Log = buf.String()
+		report.Handlers = handlers
+
+		var (
+			hasFailed  bool
+			hasSkipped bool
+			hasPassed  bool
+		)
+
+		for _, h := range handlers {
+			switch h.Status {
+			case "failed":
+				hasFailed = true
+			case "passed":
+				hasPassed = true
+			case "skipped":
+				hasSkipped = true
+			}
+		}
+
+		switch {
+		case hasFailed:
+			report.Status = "failed"
+		case hasPassed:
+			report.Status = "passed"
+		case hasSkipped:
+			report.Status = "skipped"
+		}
+	}()
 
 	dir, err := ioutil.TempDir("", "test-")
 	if err != nil {
@@ -108,10 +165,11 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 	bin := path.Join(dir, "test")
 
 	{ // download dependecies
+		fmt.Fprintf(&buf, "$ go get -d %s\n", pkg)
 		// `-d` we are just downloading the missing deps here
 		cmd := exec.Command("go", "get", "-d", "-v", "./"+path.Join("_thirdparty", pkg))
-		cmd.Stderr = os.Stderr
-		cmd.Stdout = os.Stdout
+		cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
+		cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
 		go func() {
 			<-ctx.Done()
 			cmd.Process.Kill()
@@ -124,7 +182,7 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
-			return buf.Bytes(), nil, false
+			return
 		}
 	}
 
@@ -146,14 +204,14 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
-			return buf.Bytes(), nil, false
+			return
 		}
 	}
 
 	{ // run binary
 		fmt.Fprintf(&buf, "$ run %s\n", pkg)
 		cmd := exec.Command(bin)
-		cmd.Stdout = &report
+		cmd.Stdout = &reportBuf
 		cmd.Stderr = &buf
 		go func() {
 			<-ctx.Done()
@@ -167,9 +225,9 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
-			return buf.Bytes(), nil, false
+			return
 		}
 	}
 
-	return buf.Bytes(), report.Bytes(), true
+	return
 }

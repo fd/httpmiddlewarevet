@@ -1,9 +1,10 @@
 package reports
 
-type Package struct {
+type UnversionedPackage struct {
 	Pkg      string     `json:"package"`
 	Status   string     `json:"status"`
 	Handlers []*Handler `json:"handlers"`
+	Log      string     `json:"log"`
 }
 
 type Handler struct {

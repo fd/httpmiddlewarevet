@@ -8,8 +8,6 @@ import (
 
 func main() {
 	testing.Run(
-		"net/http",
-
 		testing.Middleware{
 			Name: "Handler",
 			Func: func(h http.Handler) http.Handler {

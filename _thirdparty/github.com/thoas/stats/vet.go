@@ -9,8 +9,6 @@ import (
 
 func main() {
 	testing.Run(
-		"github.com/thoas/stats",
-
 		testing.Middleware{
 			Name: "Handler",
 			Func: func(h http.Handler) http.Handler {
