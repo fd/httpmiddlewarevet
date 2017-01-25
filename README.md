@@ -11,9 +11,9 @@ We test against go1.5, go1.6, go1.7, go master.
 
 #### Validate Middleware Handlers with Vet
 
-Many http.Handler wrappers (e.g. middleware) do not implement all needed
-interfaces or respect basic http/x semantics.
-**Vet** provides a test to validate these handlers.
+Many `http.Handler` wrappers (e.g. middleware) do not implement all necessary
+interfaces or respect the basic semantics of those interfaces. **Vet** provides
+a tool to test these handlers.
 
 example :
 
@@ -52,3 +52,13 @@ func Test(t *testing.T) {
 * `http.Request.Context`
   * `go1.x`: absent
   * `go1.8+`: Done() semantics
+
+This list is expected to grow over time. Contributions are welcome.
+
+
+### Which version of Go are tested
+
+The last stable release and the two previous minor releases as well as
+tip are tested. So if `go1.7` is the latest stable release `go1.7`, `go1.6`,
+`go1.5` and `go1.8-pre` are tested. This gives any middleware maintainers the
+leeway to guarantee _stable && stable-1_ stability.
