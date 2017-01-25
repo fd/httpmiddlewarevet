@@ -1,6 +1,12 @@
 [![Build Status](https://travis-ci.org/fd/httpmiddlewarevet.svg?branch=master)](https://travis-ci.org/fd/httpmiddlewarevet)
 [![GoDoc](https://godoc.org/github.com/fd/httpmiddlewarevet?status.svg)](https://godoc.org/github.com/fd/httpmiddlewarevet)
 
+Finding high quality `net/http` middleware is hard. Middleware get outdated,
+have only partial support or fail to comply with basic `net/http` semantics
+in other ways. The `httpmiddlewarevet` project aims to provide developers
+with a clearer picture of which handlers are good `net/http` citizens and which
+are not.
+
 #### Build Status
 
 We run daily tests on commonly used third party middleware. (see `/_thirdparty`)
