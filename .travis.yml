@@ -10,3 +10,4 @@ go:
 
 script: |
   go test .
+  hmv-runner
