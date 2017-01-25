@@ -1,8 +1,12 @@
 [![Build Status](https://travis-ci.org/fd/httpmiddlewarevet.svg?branch=master)](https://travis-ci.org/fd/httpmiddlewarevet)
 [![GoDoc](https://godoc.org/github.com/fd/httpmiddlewarevet?status.svg)](https://godoc.org/github.com/fd/httpmiddlewarevet)
 
-# HTTP Middleware Vet
+#### Build Status
 
+We run daily tests on commonly used third party middleware. (see `/thirdparty`) If builds fail checkout Travis CI to find out which packages are affected.
+We test against go1.6, go1.7, go latest and go master.
+
+# HTTP Middleware Vet
 
 #### Validate Middleware Handlers with Vet
 
