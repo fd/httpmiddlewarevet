@@ -4,5 +4,5 @@ go_import_path: github.com/fd/httpmiddlewarevet
 
 go:
   - 1.x
-  - 1.7
+  - 1.7.x
   - master

@@ -95,3 +95,15 @@ func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 		client.Get(server.URL)
 	})
 }
+
+func vetHandler(t *testing.T, config configData) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vetProto(t, config, w, r)
+		vetTLS(t, config, w, r)
+		vetFlusher(t, config, w, r)
+		vetHijacker(t, config, w, r)
+		vetCloseNotifier(t, config, w, r)
+		vetReaderFrom(t, config, w, r)
+		vetPusher(t, config, w, r)
+	}
+}
