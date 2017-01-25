@@ -2,12 +2,12 @@ language: go
 
 go_import_path: github.com/fd/httpmiddlewarevet
 
+# Always build the last three minor version and master.
 go:
-  - 1.x
-  - 1.5.x
-  - 1.6.x
-  - 1.7.x
-  - master
+- 1.5.x
+- 1.6.x
+- 1.7.x
+- master
 
 script:
 - go test .

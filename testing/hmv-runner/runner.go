@@ -109,15 +109,19 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 
 	{ // download dependecies
 		// `-d` we are just downloading the missing deps here
-		cmd := exec.CommandContext(ctx, "go", "get", "-d", "-v", "./"+path.Join("_thirdparty", pkg))
+		cmd := exec.Command("go", "get", "-d", "-v", "./"+path.Join("_thirdparty", pkg))
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
+		go func() {
+			<-ctx.Done()
+			cmd.Process.Kill()
+		}()
 		err := cmd.Run()
 		if err != nil {
-			if err == context.Canceled {
+			if ctx.Err() == context.Canceled {
 				io.WriteString(&buf, "killed\n")
 			}
-			if err == context.DeadlineExceeded {
+			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
 			return buf.Bytes(), nil, false
@@ -128,14 +132,18 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 		fmt.Fprintf(&buf, "$ go build %s\n", pkg)
 		// `-i` to install deps in GOPATH
 		// `-o` to control where the bin is saved
-		cmd := exec.CommandContext(ctx, "go", "build", "-i", "-o", bin, "./"+path.Join("_thirdparty", pkg))
+		cmd := exec.Command("go", "build", "-i", "-o", bin, "./"+path.Join("_thirdparty", pkg))
+		go func() {
+			<-ctx.Done()
+			cmd.Process.Kill()
+		}()
 		result, err := cmd.CombinedOutput()
 		buf.Write(result)
 		if err != nil {
-			if err == context.Canceled {
+			if ctx.Err() == context.Canceled {
 				io.WriteString(&buf, "killed\n")
 			}
-			if err == context.DeadlineExceeded {
+			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
 			return buf.Bytes(), nil, false
@@ -144,15 +152,19 @@ func runTest(ctx context.Context, pkg string) ([]byte, []byte, bool) {
 
 	{ // run binary
 		fmt.Fprintf(&buf, "$ run %s\n", pkg)
-		cmd := exec.CommandContext(ctx, bin)
+		cmd := exec.Command(bin)
 		cmd.Stdout = &report
 		cmd.Stderr = &buf
+		go func() {
+			<-ctx.Done()
+			cmd.Process.Kill()
+		}()
 		err := cmd.Run()
 		if err != nil {
-			if err == context.Canceled {
+			if ctx.Err() == context.Canceled {
 				io.WriteString(&buf, "killed\n")
 			}
-			if err == context.DeadlineExceeded {
+			if ctx.Err() == context.DeadlineExceeded {
 				io.WriteString(&buf, "timeout\n")
 			}
 			return buf.Bytes(), nil, false
