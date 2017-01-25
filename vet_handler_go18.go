@@ -1,6 +1,6 @@
 // +build go1.8
 
-package http_middleware_vet
+package httpmiddlewarevet
 
 import (
 	"io"

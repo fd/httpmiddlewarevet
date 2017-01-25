@@ -17,7 +17,7 @@ import (
 	"net/http"
 	"testing"
 
-	httpmiddlewarevet "github.com/fd/httpmiddlewarevet"
+	"github.com/fd/httpmiddlewarevet"
 )
 
 func Test(t *testing.T) {

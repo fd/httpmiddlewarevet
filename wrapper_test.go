@@ -1,4 +1,4 @@
-package http_middleware_vet
+package httpmiddlewarevet
 
 import (
 	"net/http"
