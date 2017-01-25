@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -40,7 +41,17 @@ func main() {
 		panic(err)
 	}
 
-	err = ioutil.WriteFile("./report.json", data, 0666)
+	err = os.MkdirAll("dist", 0777)
+	if err != nil {
+		panic(err)
+	}
+
+	commitHash := os.Getenv("TRAVIS_COMMIT")
+	if commitHash == "" {
+		commitHash = "dev"
+	}
+
+	err = ioutil.WriteFile("./dist/"+commitHash+"/"+runtime.Version()+".json", data, 0666)
 	if err != nil {
 		panic(err)
 	}
