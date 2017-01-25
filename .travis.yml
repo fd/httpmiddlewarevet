@@ -8,6 +8,6 @@ go:
   - 1.7.x
   - master
 
-script: |
-  go test .
-  hmv-runner
+script:
+- go test .
+- hmv-runner
