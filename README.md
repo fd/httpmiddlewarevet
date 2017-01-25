@@ -3,14 +3,17 @@
 
 #### Build Status
 
-We run daily tests on commonly used third party middleware. (see `/thirdparty`) If builds fail checkout Travis CI to find out which packages are affected.
-We test against go1.6, go1.7, go latest and go master.
+We run daily tests on commonly used third party middleware. (see `/_thirdparty`)
+If builds fail checkout Travis CI to find out which packages are affected.
+We test against go1.5, go1.6, go1.7, go master.
 
 # HTTP Middleware Vet
 
 #### Validate Middleware Handlers with Vet
 
-Many http.Handler wrappers (e.g. middleware) do not implement all needed interfaces. **Vet** provides a test to validate these handlers.
+Many http.Handler wrappers (e.g. middleware) do not implement all needed
+interfaces or respect basic http/x semantics.
+**Vet** provides a test to validate these handlers.
 
 example :
 
@@ -33,21 +36,19 @@ func Test(t *testing.T) {
 
 ----
 
-#### Middleware Must Implement :
+### What is tested for
 
-- HTTP/1.1
-  - http.Flusher
-  - http.Hijacker
-  - http.CloseNotifier
-  - io.ReaderFrom
-- TLS/HTTP/1.1
-  - TLS
-  - http.Flusher
-  - http.Hijacker
-  - http.CloseNotifier
-  - io.ReaderFrom
-- TLS/HTTP/2.0
-  - TLS
-  - http.Flusher
-  - http.CloseNotifier
-  - http.Pusher
+* `http.Flusher`
+  * `go1.x`: interface compliance
+* `http.Hijacker`
+  * `go1.x`: interface compliance
+* `http.CloseNotifier`
+  * `go1.x`: interface compliance
+  * `go1.x`: semantics
+* `io.ReaderFrom`
+  * `go1.x`: interface compliance
+* `http.Pusher`
+  * `go1.8+`: interface compliance
+* `http.Request.Context`
+  * `go1.x`: absent
+  * `go1.8+`: Done() semantics
