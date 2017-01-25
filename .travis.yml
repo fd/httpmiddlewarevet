@@ -12,3 +12,9 @@ go:
 script:
 - go test .
 - hmv-runner
+
+addons:
+  artifacts:
+    debug: true
+    paths:
+    - report.json
