@@ -13,6 +13,7 @@ script:
 - hmv-runner
 
 deploy:
+  skip_cleanup: true
   provider: s3
   access_key_id: AKIAJZ7Y2JLXRD4B3EAA
   secret_access_key:
