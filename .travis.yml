@@ -21,5 +21,4 @@ deploy:
   local-dir: dist
   acl: public_read
   on:
-    branch: master
     repo: fd/httpmiddlewarevet
