@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"golang.org/x/net/http2"
 )
 
 type configData struct {
@@ -63,17 +61,18 @@ func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 
 	t.Run("TLS/HTTP/1.1", func(t *testing.T) {
 		server := httptest.NewUnstartedServer(f(vetHandler(t, https11Config)))
+		server.TLS = &tls.Config{
+			NextProtos: []string{"http/1.1"},
+		}
 
 		server.StartTLS()
 		defer server.Close()
 
-		client := http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{
-					InsecureSkipVerify: true,
-				},
-			},
-		}
+		rt := &http.Transport{}
+		client := http.Client{Transport: rt}
+		// fails because there is no server running at that address (but used to setup HTTP/2)
+		client.Get("http://127.0.0.1:1/")
+		rt.TLSClientConfig.InsecureSkipVerify = true
 
 		client.Get(server.URL)
 	})
@@ -87,14 +86,11 @@ func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 		server.StartTLS()
 		defer server.Close()
 
-		client := http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{
-					InsecureSkipVerify: true,
-				},
-			},
-		}
-		http2.ConfigureTransport(client.Transport.(*http.Transport))
+		rt := &http.Transport{}
+		client := http.Client{Transport: rt}
+		// fails because there is no server running at that address (but used to setup HTTP/2)
+		client.Get("http://127.0.0.1:1/")
+		rt.TLSClientConfig.InsecureSkipVerify = true
 
 		client.Get(server.URL)
 	})
