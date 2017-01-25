@@ -50,16 +50,18 @@ var http20Config = configData{
 
 // Vet will verify that you correctly implement your http.ResponseWriter wrapper.
 func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
-	t.Run("HTTP/1.1", func(t *testing.T) {
+	t.Log("HTTP/1.1")
+	{
 		server := httptest.NewUnstartedServer(f(vetHandler(t, http11Config)))
 
 		server.Start()
 		defer server.Close()
 
 		http.Get(server.URL)
-	})
+	}
 
-	t.Run("TLS/HTTP/1.1", func(t *testing.T) {
+	t.Log("TLS/HTTP/1.1")
+	{
 		server := httptest.NewUnstartedServer(f(vetHandler(t, https11Config)))
 		server.TLS = &tls.Config{
 			NextProtos: []string{"http/1.1"},
@@ -75,9 +77,10 @@ func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 		rt.TLSClientConfig.InsecureSkipVerify = true
 
 		client.Get(server.URL)
-	})
+	}
 
-	t.Run("TLS/HTTP/2.0", func(t *testing.T) {
+	t.Log("TLS/HTTP/2.0")
+	{
 		server := httptest.NewUnstartedServer(f(vetHandler(t, http20Config)))
 		server.TLS = &tls.Config{
 			NextProtos: []string{"h2", "http/1.1"},
@@ -93,5 +96,17 @@ func Vet(t *testing.T, f func(h http.Handler) http.Handler) {
 		rt.TLSClientConfig.InsecureSkipVerify = true
 
 		client.Get(server.URL)
-	})
+	}
+}
+
+func vetHandler(t *testing.T, config configData) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vetProto(t, config, w, r)
+		vetTLS(t, config, w, r)
+		vetFlusher(t, config, w, r)
+		vetHijacker(t, config, w, r)
+		vetCloseNotifier(t, config, w, r)
+		vetReaderFrom(t, config, w, r)
+		vetPusher(t, config, w, r)
+	}
 }
