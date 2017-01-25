@@ -41,17 +41,19 @@ func main() {
 		panic(err)
 	}
 
-	err = os.MkdirAll("dist", 0777)
-	if err != nil {
-		panic(err)
-	}
-
 	commitHash := os.Getenv("TRAVIS_COMMIT")
 	if commitHash == "" {
 		commitHash = "dev"
 	}
 
-	err = ioutil.WriteFile("./dist/"+commitHash+"/"+runtime.Version()+".json", data, 0666)
+	reportFile := "./dist/" + commitHash + "/" + runtime.Version() + ".json"
+
+	err = os.MkdirAll(path.Dir(reportFile), 0777)
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile(reportFile, data, 0666)
 	if err != nil {
 		panic(err)
 	}
