@@ -8,10 +8,10 @@ var hijackerTest = &testCase{
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 			_, ok := w.(http.Hijacker)
-			if t.Proto() == "HTTP/2.0" && ok {
+			if t.Proto() == protoHTTP20 && ok {
 				t.FailWithMessage("http.ResponseWriter must not implement http.Hijacker")
 			}
-			if t.Proto() != "HTTP/2.0" && !ok {
+			if t.Proto() != protoHTTP20 && !ok {
 				t.FailWithMessage("http.ResponseWriter must implement http.Hijacker")
 			}
 
