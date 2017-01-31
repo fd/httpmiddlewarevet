@@ -24,3 +24,6 @@ deploy:
   on:
     all_branches: true
     repo: fd/httpmiddlewarevet
+
+notifications:
+  webhooks: https://httpmiddlewarevet.herokuapp.com/webhook/travis
