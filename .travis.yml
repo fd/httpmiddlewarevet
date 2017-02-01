@@ -8,6 +8,11 @@ go:
 - 1.7.x
 - master
 
+before_script:
+- echo https://httpmiddlewarevet.herokuapp.com/webhook/travis/{{ $TRAVIS_GO_VERSION }}
+- echo https://httpmiddlewarevet.herokuapp.com/webhook/travis/$TRAVIS_GO_VERSION
+- echo (https://httpmiddlewarevet.herokuapp.com/webhook/travis/)+($TRAVIS_GO_VERSION)
+
 script:
 - go test .
 - hmv-runner
