@@ -26,4 +26,4 @@ deploy:
     repo: fd/httpmiddlewarevet
 
 notifications:
-  webhooks: https://httpmiddlewarevet.herokuapp.com/webhook/travis
+  webhooks: https://httpmiddlewarevet.herokuapp.com/webhook/travis/{{ TRAVIS_GO_VERSION }}
