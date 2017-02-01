@@ -11,6 +11,7 @@ go:
 before_script:
 - echo https://httpmiddlewarevet.herokuapp.com/webhook/travis/$TRAVIS_GO_VERSION
 - export WEBHOOK_URL=https://httpmiddlewarevet.herokuapp.com/webhook/travis/$TRAVIS_GO_VERSION
+- echo $WEBHOOK_URL
 
 script:
 - go test .
