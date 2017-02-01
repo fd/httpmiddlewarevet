@@ -10,7 +10,7 @@ go:
 
 env:
   matrix:
-    - WEBHOOK_URL=https://httpmiddlewarevet.herokuapp.com/webhook/travis/${TRAVIS_GO_VERSION}
+    - WEBHOOK_URL=https://httpmiddlewarevet.herokuapp.com/webhook/travis/($TRAVIS_GO_VERSION)
 
 before_script:
 - echo $WEBHOOK_URL
@@ -33,4 +33,4 @@ deploy:
     repo: fd/httpmiddlewarevet
 
 notifications:
-  webhooks: ${WEBHOOK_URL}
+  webhooks: $WEBHOOK_URL
