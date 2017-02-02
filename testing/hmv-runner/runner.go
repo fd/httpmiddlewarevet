@@ -46,7 +46,12 @@ func main() {
 		commitHash = "dev"
 	}
 
-	reportFile := "./dist/" + commitHash + "/" + runtime.Version() + ".json"
+	version := runtime.Version()
+	if strings.Contains(version, "devel") {
+		version = "master"
+	}
+
+	reportFile := "./dist/" + commitHash + "/" + version + ".json"
 
 	err = os.MkdirAll(path.Dir(reportFile), 0777)
 	if err != nil {
