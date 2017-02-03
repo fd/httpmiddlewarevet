@@ -73,17 +73,17 @@ func runSingle(middleware Middleware) *reports.Handler {
 			}
 
 			if report.Failed {
-				r.Status = "failed"
+				r.Status = reports.StatusFailed
 				r.Message = report.Message
 				testHasFailed = true
 				handlerHasFailed = true
 			} else if report.Skipped {
-				r.Status = "skipped"
+				r.Status = reports.StatusSkipped
 				r.Message = report.Message
 				testHasSkipped = true
 				handlerHasSkipped = true
 			} else {
-				r.Status = "passed"
+				r.Status = reports.StatusPassed
 				testHasPassed = true
 				handlerHasPassed = true
 			}
@@ -93,21 +93,21 @@ func runSingle(middleware Middleware) *reports.Handler {
 
 		switch {
 		case testHasFailed:
-			testReport.Status = "failed"
+			testReport.Status = reports.StatusFailed
 		case testHasPassed:
-			testReport.Status = "passed"
+			testReport.Status = reports.StatusPassed
 		case testHasSkipped:
-			testReport.Status = "skipped"
+			testReport.Status = reports.StatusSkipped
 		}
 	}
 
 	switch {
 	case handlerHasFailed:
-		handlerReport.Status = "failed"
+		handlerReport.Status = reports.StatusFailed
 	case handlerHasPassed:
-		handlerReport.Status = "passed"
+		handlerReport.Status = reports.StatusPassed
 	case handlerHasSkipped:
-		handlerReport.Status = "skipped"
+		handlerReport.Status = reports.StatusSkipped
 	}
 
 	return handlerReport

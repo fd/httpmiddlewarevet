@@ -46,7 +46,12 @@ func main() {
 		commitHash = "dev"
 	}
 
-	reportFile := "./dist/" + commitHash + "/" + runtime.Version() + ".json"
+	version := runtime.Version()
+	if strings.Contains(version, "devel") {
+		version = "master"
+	}
+
+	reportFile := "./dist/" + commitHash + "/" + version + ".json"
 
 	err = os.MkdirAll(path.Dir(reportFile), 0777)
 	if err != nil {
@@ -150,22 +155,22 @@ func runTest(ctx context.Context, pkg string) (report *reports.UnversionedPackag
 
 		for _, h := range handlers {
 			switch h.Status {
-			case "failed":
+			case reports.StatusFailed:
 				hasFailed = true
-			case "passed":
+			case reports.StatusPassed:
 				hasPassed = true
-			case "skipped":
+			case reports.StatusSkipped:
 				hasSkipped = true
 			}
 		}
 
 		switch {
 		case hasFailed:
-			report.Status = "failed"
+			report.Status = reports.StatusFailed
 		case hasPassed:
-			report.Status = "passed"
+			report.Status = reports.StatusPassed
 		case hasSkipped:
-			report.Status = "skipped"
+			report.Status = reports.StatusSkipped
 		}
 	}()
 

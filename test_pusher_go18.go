@@ -8,9 +8,9 @@ var pusherTest = &testCase{
 	Name: "Pusher",
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		var isPusher = map[string]bool{
-			"HTTP/1.1":     false,
-			"HTTP/1.1+TLS": false,
-			"HTTP/2.0":     true,
+			protoHTTP11:     false,
+			protoHTTP11TLS: false,
+			protoHTTP20:     true,
 		}
 
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

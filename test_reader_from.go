@@ -11,10 +11,10 @@ var readerFromTest = &testCase{
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 			_, ok := w.(io.ReaderFrom)
-			if t.Proto() == "HTTP/2.0" && ok {
+			if t.Proto() == protoHTTP20 && ok {
 				t.FailWithMessage("http.ResponseWriter must not implement io.ReaderFrom")
 			}
-			if t.Proto() != "HTTP/2.0" && !ok {
+			if t.Proto() != protoHTTP20 && !ok {
 				t.FailWithMessage("http.ResponseWriter must implement io.ReaderFrom")
 			}
 
