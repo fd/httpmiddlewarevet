@@ -10,7 +10,7 @@ import (
 func main() {
 	testing.Run(
 		testing.Middleware{
-			Name: "link.Handler",
+			Name: "Handler",
 			Func: func(h http.Handler) http.Handler {
 				return link.Handler(h)
 			},
