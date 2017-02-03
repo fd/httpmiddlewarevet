@@ -12,9 +12,6 @@ script:
 - go test .
 - hmv-runner
 
-after_script:
-- curl -X GET "https://httpmiddlewarevet.herokuapp.com/webhook/travis?commit=${TRAVIS_COMMIT}&version=${TRAVIS_GO_VERSION}"
-
 deploy:
   skip_cleanup: true
   provider: s3
@@ -27,3 +24,6 @@ deploy:
   on:
     all_branches: true
     repo: fd/httpmiddlewarevet
+
+after_deploy:
+- curl -X GET "https://httpmiddlewarevet.herokuapp.com/webhook/travis?commit=${TRAVIS_COMMIT}&version=${TRAVIS_GO_VERSION}"
