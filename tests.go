@@ -17,6 +17,7 @@ var tests = []*testCase{
 	pusherTest,
 }
 
+// Run generates reports for a middleware handler
 func Run(middleware func(h http.Handler) http.Handler) []*Report {
 	var reports []*Report
 	for _, test := range tests {

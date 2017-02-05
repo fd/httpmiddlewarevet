@@ -10,8 +10,8 @@ var protoTest = &testCase{
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			if t.Proto() == "HTTP/1.1+TLS" {
-				if "HTTP/1.1" != r.Proto {
+			if t.Proto() == protoHTTP11TLS {
+				if protoHTTP11 != r.Proto {
 					t.FailWithMessage(fmt.Sprintf("unexpected request.Proto: %q", r.Proto))
 				}
 				return
