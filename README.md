@@ -7,11 +7,9 @@ in other ways. The `httpmiddlewarevet` project aims to provide developers
 with a clearer picture of which handlers are good `net/http` citizens and which
 are not.
 
-#### Build Status
+#### Results
 
-We run daily tests on commonly used third party middleware. (see `/_thirdparty`)
-If builds fail checkout Travis CI to find out which packages are affected.
-We test against go1.5, go1.6, go1.7, go master.
+Checkout **[middleware.vet](https://middleware.vet)** to see the latest test results.
 
 # HTTP Middleware Vet
 
@@ -62,7 +60,7 @@ func Test(t *testing.T) {
 This list is expected to grow over time. Contributions are welcome.
 
 
-### Which version of Go are tested
+### Which versions of Go are tested
 
 The last stable release and the two previous minor releases as well as
 tip are tested. So if `go1.7` is the latest stable release `go1.7`, `go1.6`,
