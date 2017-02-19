@@ -8,7 +8,7 @@ import (
 )
 
 var contextTest = &testCase{
-	Name: "Context",
+	Name: "context.Context",
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
