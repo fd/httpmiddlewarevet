@@ -3,7 +3,7 @@ package httpmiddlewarevet
 import "net/http"
 
 var tlsTest = &testCase{
-	Name: "TLS",
+	Name: "request.TLS",
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
