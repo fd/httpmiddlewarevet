@@ -12,9 +12,7 @@ func main() {
 		testing.Middleware{
 			Name: "NewHandler",
 			Func: func(h http.Handler) http.Handler {
-				handler := httpcache.NewHandler(httpcache.NewMemoryCache(), h)
-				handler.Shared = true
-				return handler
+				return httpcache.NewHandler(httpcache.NewMemoryCache(), h)
 			},
 		},
 	)
