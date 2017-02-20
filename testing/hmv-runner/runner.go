@@ -119,7 +119,7 @@ func findPackages() ([]string, error) {
 		return nil, err
 	}
 
-	sort.Strings(pkgs)
+	sort.Sort(ByLowerCaseString(pkgs))
 	return pkgs, nil
 }
 
@@ -248,4 +248,17 @@ func runTest(ctx context.Context, pkg string) (report *reports.UnversionedPackag
 	}
 
 	return
+}
+
+// ByLowerCaseString is used to sort strings while ignore case
+type ByLowerCaseString []string
+
+func (s ByLowerCaseString) Len() int {
+	return len(s)
+}
+func (s ByLowerCaseString) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+func (s ByLowerCaseString) Less(i, j int) bool {
+	return strings.ToLower(s[i]) < strings.ToLower(s[j])
 }

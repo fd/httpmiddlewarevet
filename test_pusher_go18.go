@@ -5,12 +5,12 @@ package httpmiddlewarevet
 import "net/http"
 
 var pusherTest = &testCase{
-	Name: "Pusher",
+	Name: "http.Pusher",
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		var isPusher = map[string]bool{
-			protoHTTP11:     false,
+			protoHTTP11:    false,
 			protoHTTP11TLS: false,
-			protoHTTP20:     true,
+			protoHTTP20:    true,
 		}
 
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
