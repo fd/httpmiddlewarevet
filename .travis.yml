@@ -3,7 +3,6 @@ language: go
 go_import_path: github.com/fd/httpmiddlewarevet
 
 go:
-- 1.5.x
 - 1.6.x
 - 1.7.x
 - 1.8.x
