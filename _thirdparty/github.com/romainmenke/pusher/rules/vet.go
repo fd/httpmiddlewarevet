@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/fd/httpmiddlewarevet/testing"
-	"github.com/romainmenke/pusher/linkheader"
+	"github.com/romainmenke/pusher/rules"
 )
 
 func main() {
@@ -41,7 +41,7 @@ func main() {
 	</fonts/CutiveMono-Regular.ttf>; rel=preload; as=font;
 	</call.json>; rel=preload;`)
 
-				return linkheader.Handler(h, linkheader.RulesReaderOption(reader))
+				return rules.Handler(h, rules.ReaderOption(reader))
 			},
 		},
 	)
