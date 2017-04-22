@@ -2,17 +2,18 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/fd/httpmiddlewarevet/testing"
-	"github.com/romainmenke/pusher/link"
+	"github.com/romainmenke/pusher/parser"
 )
 
 func main() {
 	testing.Run(
 		testing.Middleware{
-			Name: "link.Handler",
+			Name: "Handler",
 			Func: func(h http.Handler) http.Handler {
-				return link.Handler(h)
+				return parser.Handler(h, parser.WithCache(), parser.CacheDuration(time.Second*10))
 			},
 		},
 	)
