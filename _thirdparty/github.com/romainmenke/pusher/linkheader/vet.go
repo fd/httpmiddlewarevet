@@ -3,24 +3,15 @@ package main
 import (
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/fd/httpmiddlewarevet/testing"
-	"github.com/romainmenke/pusher/link"
 	"github.com/romainmenke/pusher/linkheader"
-	"github.com/romainmenke/pusher/parser"
 )
 
 func main() {
 	testing.Run(
 		testing.Middleware{
-			Name: "link.Handler",
-			Func: func(h http.Handler) http.Handler {
-				return link.Handler(h)
-			},
-		},
-		testing.Middleware{
-			Name: "linkheader.Handler",
+			Name: "Handler",
 			Func: func(h http.Handler) http.Handler {
 
 				reader := strings.NewReader(`/
@@ -51,12 +42,6 @@ func main() {
 	</call.json>; rel=preload;`)
 
 				return linkheader.Handler(h, linkheader.RulesReaderOption(reader))
-			},
-		},
-		testing.Middleware{
-			Name: "parser.Handler",
-			Func: func(h http.Handler) http.Handler {
-				return parser.Handler(h, parser.WithCache(), parser.CacheDuration(time.Second*10))
 			},
 		},
 	)
