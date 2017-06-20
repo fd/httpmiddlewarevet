@@ -10,6 +10,7 @@ var tests = []*testCase{
 	protoTest,
 	tlsTest,
 	readerFromTest,
+	writeStringTest,
 	hijackerTest,
 	flusherTest,
 	closeNotifierTest,
