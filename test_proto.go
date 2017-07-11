@@ -6,7 +6,7 @@ import (
 )
 
 var protoTest = &testCase{
-	Name: "Proto",
+	Name: "request.Proto",
 	Func: func(t test, client *http.Client, serve func(h http.Handler) string) {
 		url := serve(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

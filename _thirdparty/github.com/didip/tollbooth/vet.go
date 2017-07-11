@@ -2,17 +2,18 @@ package main
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/didip/tollbooth"
 	"github.com/fd/httpmiddlewarevet/testing"
-	"github.com/romainmenke/pusher/link"
 )
 
 func main() {
 	testing.Run(
 		testing.Middleware{
-			Name: "link.Handler",
+			Name: "LimitHandler",
 			Func: func(h http.Handler) http.Handler {
-				return link.Handler(h)
+				return tollbooth.LimitHandler(tollbooth.NewLimiter(1, time.Second), h)
 			},
 		},
 	)
