@@ -86,13 +86,15 @@ func runTest(tc *testCase, tr *testReporter, newServer newServerFunc, wrapper wr
 		wg     = &sync.WaitGroup{}
 		done   = make(chan struct{})
 		rt     = &http.Transport{}
-		client = &http.Client{Transport: rt}
+		client = &http.Client{
+			Transport: rt,
+			Timeout:   time.Millisecond * 50,
+		}
 	)
 
 	{ // setup default config
 		// fails because there is no server running at that address (but used to setup HTTP/2)
 		client.Get("http://127.0.0.1:1/")
-		// TODO: go1.5 doesn't initialise TLSClientConfig
 		if rt.TLSClientConfig == nil {
 			rt.TLSClientConfig = &tls.Config{}
 		}
