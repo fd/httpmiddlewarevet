@@ -26,4 +26,4 @@ deploy:
     repo: fd/httpmiddlewarevet
 
 after_deploy:
-- bash scripts/after_deploy
+- bash scripts/after_deploy.sh
