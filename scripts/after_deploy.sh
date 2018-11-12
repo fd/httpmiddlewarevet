@@ -2,9 +2,9 @@
 
 set -e
 
-GIMME_OUTPUT="$(gimme 1.x | tee -a $HOME/.bashrc)"
-GO_VERSION = echo $GIMME_OUTPUT | awk "{ print $3 }"
-GO_VERSION = ${GO_VERSION#"go"}
+GIMME_OUTPUT="go version go1.11beta1 linux/amd64"
+GO_VERSION=$(echo "$GIMME_OUTPUT" | awk '{ print $3 }')
+GO_VERSION=${GO_VERSION#"go"}
 
 echo "$GO_VERSION"
 
