@@ -26,4 +26,4 @@ deploy:
     repo: fd/httpmiddlewarevet
 
 after_deploy:
-- curl -X GET "https://httpmiddlewarevet.herokuapp.com/webhook/travis?commit=${TRAVIS_COMMIT}&version=${TRAVIS_GO_VERSION}&branch=${TRAVIS_BRANCH}"
+- bash scripts/after_deploy
