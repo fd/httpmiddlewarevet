@@ -68,14 +68,14 @@ func newHTTPServer(h http.Handler) *httptest.Server {
 
 func newHTTPSServer(h http.Handler) *httptest.Server {
 	server := httptest.NewUnstartedServer(h)
-	server.TLS = &tls.Config{NextProtos: []string{protoHTTP11}}
+	server.TLS = &tls.Config{NextProtos: []string{"http/1.1"}}
 	server.StartTLS()
 	return server
 }
 
 func newHTTP2Server(h http.Handler) *httptest.Server {
 	server := httptest.NewUnstartedServer(h)
-	server.TLS = &tls.Config{NextProtos: []string{"h2", protoHTTP11}}
+	server.TLS = &tls.Config{NextProtos: []string{"h2", "http/1.1"}}
 	server.StartTLS()
 	return server
 }
